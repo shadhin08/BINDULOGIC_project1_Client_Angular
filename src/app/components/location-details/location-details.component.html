@@ -1,0 +1,12 @@
+<div class="rent-post-main">
+  <div class="location-rent-post-heading">
+    <h1>Rent Posts in {{ location?.area }}</h1>
+  </div>
+  <div class="rent-post-item-main">
+    <app-rent-post-item
+      *ngFor="let rentPost of locationRentPosts"
+      [rentPost]="rentPost"
+      class="rent-post-item"
+    ></app-rent-post-item>
+  </div>
+</div>

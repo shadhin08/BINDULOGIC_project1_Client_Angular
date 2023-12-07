@@ -1,0 +1,47 @@
+<div class="login-main">
+  <div class="login-container">
+    <div class="card flex justify-content-center">
+      <div>
+        <div class="login-header">
+          <h1 class="login-title">User Login</h1>
+        </div>
+        <span class="p-float-label">
+          <input pInputText id="username" [(ngModel)]="username" />
+          <label htmlFor="username">Username</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText id="password" [(ngModel)]="password" />
+          <label htmlFor="password">Password</label>
+        </span>
+        <div class="card flex justify-content-center login-button">
+          <p-button
+            label="Login"
+            [disabled]="isLoginBtnDisabled"
+            (click)="onLoginClick()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card login-messages">
+    <p-messages
+      [(value)]="loginMessages"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+  </div>
+  <div class="sign-up">
+    <p>Or</p>
+    <div class="card flex justify-content-center login-button">
+      <button
+        pButton
+        pRipple
+        class="p-button-success"
+        [routerLink]="['/signup']"
+      >
+        Create an account
+      </button>
+    </div>
+  </div>
+</div>

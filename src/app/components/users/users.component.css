@@ -1,0 +1,30 @@
+.margin-top-50 {
+  margin-top: 50px;
+}
+
+.user-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-details {
+  width: 70%;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 1px 1px 20px 2px gray;
+}
+.user-image img {
+  cursor: pointer;
+  height: 150px;
+}
+.user-data {
+  cursor: pointer;
+  margin-left: 30px;
+}
+.users-heading {
+  text-align: center;
+}

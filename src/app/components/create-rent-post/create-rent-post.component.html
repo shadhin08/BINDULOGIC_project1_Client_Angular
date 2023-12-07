@@ -1,0 +1,123 @@
+<div class="center-align create-rent-post-main">
+  <h1 class="create-rent-post-heading">Create a new rent post</h1>
+  <div>
+    <label class="create-rent-post-input-heading">Post Heading</label>
+    <input
+      class="create-rent-post-input"
+      type="text"
+      pInputText
+      [(ngModel)]="heading"
+    />
+    <label class="create-rent-post-input-heading">Post Description</label>
+    <textarea
+      class="create-rent-post-input"
+      rows="5"
+      cols="30"
+      pInputTextarea
+      [(ngModel)]="description"
+    ></textarea>
+
+    <div class="flex-center">
+      <div class="rent">
+        <label class="create-rent-post-input-heading">Rent</label>
+        <p-inputNumber
+          class="create-rent-post-input"
+          [(ngModel)]="rent"
+          inputId="currency-bangladesh"
+          mode="currency"
+          currency="BDT"
+          locale="en-BD"
+          [min]="0"
+        >
+        </p-inputNumber>
+      </div>
+
+      <div class="bed">
+        <label class="create-rent-post-input-heading">Bed</label>
+        <p-inputNumber
+          class="create-rent-post-input"
+          [(ngModel)]="bed"
+          inputId="minmax"
+          mode="decimal"
+          [min]="1"
+        >
+        </p-inputNumber>
+      </div>
+
+      <div class="bath">
+        <label class="create-rent-post-input-heading">Bath</label>
+        <p-inputNumber
+          class="create-rent-post-input"
+          [(ngModel)]="bath"
+          inputId="minmax"
+          mode="decimal"
+          [min]="1"
+        >
+        </p-inputNumber>
+      </div>
+      <div class="size">
+        <label class="create-rent-post-input-heading">Size</label>
+        <p-inputNumber
+          class="create-rent-post-input"
+          [(ngModel)]="size"
+          inputId="minmaxfraction"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [min]="1"
+        >
+        </p-inputNumber>
+      </div>
+    </div>
+    <div class="flex-center">
+      <div class="city">
+        <label class="create-rent-post-input-heading">City</label>
+        <p-dropdown
+          class="create-rent-post-input"
+          [options]="cities"
+          [(ngModel)]="selectedCity"
+          optionLabel="area"
+          [showClear]="true"
+          placeholder="Select a City"
+        ></p-dropdown>
+      </div>
+
+      <div class="image">
+        <label class="create-rent-post-input-heading">Image</label>
+        <input
+          class="create-rent-post-input input-file"
+          type="file"
+          accept="image/*"
+          (change)="onImageLoad($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="card create-rent-post-messages">
+    <p-messages
+      [(value)]="imageStatus"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+  </div>
+  <div class="card create-rent-post-messages">
+    <p-messages
+      [(value)]="inputStatus"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+  </div>
+
+  <div class="text-center margin-20">
+    <button
+      pButton
+      pRipple
+      [disabled]="isCreateRentPostBtnDisabled"
+      class="p-button-success"
+      (click)="onCreateRentPostClick()"
+    >
+      Create Rent Post
+    </button>
+  </div>
+</div>

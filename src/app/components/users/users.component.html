@@ -1,0 +1,26 @@
+<div class="margin-top-50">
+  <h1 class="users-heading">All Users</h1>
+  <div *ngFor="let user of users">
+    <div class="user-main">
+      <div class="user-details" [routerLink]="['/user/', user?.username]">
+        <div class="user-image">
+          <img
+            [src]="
+              user?.image
+                ? user?.image
+                : 'https://primefaces.org/cdn/primeng/images/usercard.png'
+            "
+            alt=""
+          />
+        </div>
+        <div class="user-data">
+          <h1>
+            <b> {{ user.firstName }} {{ user.lastName }}</b>
+          </h1>
+          <p><b>Username: </b>{{ user.username }}</p>
+          <p><b>Email: </b>{{ user.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

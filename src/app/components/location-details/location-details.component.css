@@ -1,0 +1,11 @@
+.rent-post-item-main {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+.rent-post-item {
+  margin: 20px;
+}
+.location-rent-post-heading {
+  text-align: center;
+}

@@ -1,0 +1,10 @@
+<div class="margin-top-50">
+  <h1 class="locations-heading">All Locations</h1>
+  <div *ngFor="let location of locations">
+    <div class="location-main" [routerLink]="['/location/', location?.area]">
+      <div class="location-details">
+        <h1>{{ location.area }}</h1>
+      </div>
+    </div>
+  </div>
+</div>

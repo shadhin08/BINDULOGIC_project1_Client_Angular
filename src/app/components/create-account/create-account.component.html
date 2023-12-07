@@ -1,0 +1,81 @@
+<div class="center-align create-account-main">
+  <h1 class="create-account-heading">Create an account</h1>
+  <div>
+    <label class="create-account-input-heading">First Name</label>
+    <input
+      class="create-account-input"
+      type="text"
+      pInputText
+      [(ngModel)]="firstName"
+    />
+    <label class="create-account-input-heading">Last Name</label>
+    <input
+      class="create-account-input"
+      type="text"
+      pInputText
+      [(ngModel)]="lastName"
+    />
+
+    <label class="create-account-input-heading">Username</label>
+    <input
+      class="create-account-input"
+      type="text"
+      pInputText
+      [(ngModel)]="username"
+    />
+
+    <label class="create-account-input-heading">Email</label>
+    <input
+      class="create-account-input"
+      type="text"
+      pInputText
+      [(ngModel)]="email"
+    />
+
+    <div class="flex-center">
+      <div class="password">
+        <label class="create-account-input-heading">Password</label>
+        <p-password
+          class="create-account-input"
+          [(ngModel)]="password"
+          [toggleMask]="true"
+        ></p-password>
+      </div>
+      <div class="image">
+        <label class="create-account-input-heading">Profile Picture</label>
+        <input
+          class="create-account-input input-file"
+          type="file"
+          accept="image/*"
+          (change)="onImageLoad($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="card signup-messages">
+    <p-messages
+      [(value)]="imageStatus"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+  </div>
+  <div class="card signup-messages">
+    <p-messages
+      [(value)]="inputStatus"
+      [enableService]="false"
+      [closable]="false"
+    ></p-messages>
+  </div>
+
+  <div class="text-center margin-20">
+    <button
+      pButton
+      pRipple
+      [disabled]="isSignupBtnDisabled"
+      class="p-button-success"
+      (click)="onCreateAccountClick()"
+    >
+      Create Account
+    </button>
+  </div>
+</div>

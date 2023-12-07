@@ -1,0 +1,43 @@
+.create-account-main {
+  margin-top: 60px;
+}
+
+.create-account-input {
+  width: 70% !important;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  border-color: rgb(189, 188, 188) !important;
+}
+.center-align {
+  text-align: center;
+}
+
+.create-account-input-heading {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 10px;
+}
+.flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.input-file::-webkit-file-upload-button {
+  /* visibility: hidden; */
+  border: 1px solid gray;
+  height: 45px;
+  width: 200px;
+  border-radius: 5px;
+}
+.input-file {
+  margin-top: 0;
+  padding-top: 0;
+  width: 400px !important;
+}
+.image {
+  padding-top: 33px;
+}

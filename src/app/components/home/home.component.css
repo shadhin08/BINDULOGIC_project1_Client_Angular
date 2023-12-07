@@ -1,0 +1,7 @@
+.rent-post-item-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+.rent-post-item {
+  margin: 20px;
+}

@@ -1,0 +1,39 @@
+<div class="card flex justify-content-center">
+  <p-card [header]="rentPost?.heading" [style]="{ width: '360px' }">
+    <ng-template pTemplate="header">
+      <img
+        alt="Card"
+        [src]="
+          rentPost?.image
+            ? rentPost?.image
+            : 'https://primefaces.org/cdn/primeng/images/usercard.png'
+        "
+      />
+    </ng-template>
+    <p>
+      <b>$ {{ rentPost?.rent }}</b>
+    </p>
+    <p>
+      <small
+        ><b>bed: </b>{{ rentPost?.bed }}<b> bath: </b
+        >{{ rentPost?.bath }}</small
+      >
+    </p>
+    <ng-template pTemplate="footer">
+      <p>
+        by:
+        <span
+          class="color-blue cursor-pointer"
+          [routerLink]="['/user', rentPost?.userUsername]"
+          ><b>{{ rentPost?.userUsername }}</b></span
+        >
+      </p>
+    </ng-template>
+    <div
+      class="rent-location"
+      [routerLink]="['location/', rentPost?.rentAreaName]"
+    >
+      {{ rentPost?.rentAreaName }}
+    </div>
+  </p-card>
+</div>

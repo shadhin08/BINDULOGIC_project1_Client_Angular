@@ -1,0 +1,26 @@
+.login-main {
+  height: 500px;
+}
+.login-container {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-container span {
+  margin-bottom: 40px;
+}
+.login-header {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+.login-button {
+  text-align: center;
+}
+.login-messages {
+  margin: 20px;
+}
+.sign-up {
+  text-align: center;
+}

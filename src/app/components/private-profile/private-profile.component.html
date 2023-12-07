@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="card">
+    <p-splitter
+      [panelSizes]="[25, 75]"
+      [style]="{ height: '500px' }"
+      styleClass="mb-5"
+    >
+      <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+          <img
+            class="user-image"
+            alt="Card"
+            width="100%"
+            height="auto"
+            [src]="
+              user?.image
+                ? user?.image
+                : 'https://primefaces.org/cdn/primeng/images/usercard.png'
+            "
+          />
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div
+          class="col flex align-items-center justify-content-center user-details"
+        >
+          <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
+          <h3>{{ user?.username }}</h3>
+          <h3>{{ user?.email }}</h3>
+          <div class="card flex justify-content-center login-button">
+            <p-button
+              label="Log Out"
+              severity="danger"
+              [disabled]="isLogOutBtnDisabled"
+              (click)="onLogOutClick()"
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+    </p-splitter>
+  </div>
+  <div class="text-center margin-20">
+    <button
+      pButton
+      pRipple
+      class="p-button-success"
+      [routerLink]="['create-rent-post']"
+    >
+      Create a new rent post
+    </button>
+  </div>
+
+  <div class="text-center margin-10">
+    <h1>Your Rent Post</h1>
+  </div>
+  <div class="rent-post-item-main">
+    <app-rent-post-item
+      *ngFor="let rentPost of userRentPosts"
+      [rentPost]="rentPost"
+      class="rent-post-item"
+    ></app-rent-post-item>
+  </div>
+</div>
