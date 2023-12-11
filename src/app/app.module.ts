@@ -110,6 +110,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateRentPostComponent } from './components/create-rent-post/create-rent-post.component';
 import { CreateAccountComponent } from './components/create-account/create-account.component';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
+import { StoreModule } from '@ngrx/store';
+import { logedInUserReducer } from './shared/logedin-user/loggedin-user.reducer';
 
 @NgModule({
   declarations: [
@@ -157,6 +159,7 @@ import { LocationDetailsComponent } from './components/location-details/location
     OrderListModule,
     TableModule,
     TabViewModule,
+    StoreModule.forRoot({ loggedInUser: logedInUserReducer }),
   ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],
