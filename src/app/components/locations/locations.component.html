@@ -1,5 +1,12 @@
-<div class="margin-top-50">
+<app-error-messages
+  *ngIf="errorMessage"
+  [errorMessage]="errorMessage"
+></app-error-messages>
+<div *ngIf="!errorMessage" class="margin-top-50">
   <h1 class="locations-heading">All Locations</h1>
+
+  <h3 *ngIf="locations.length == 0" class="text-center color-red">Empty</h3>
+
   <div *ngFor="let location of locations">
     <div class="location-main" [routerLink]="['/location/', location?.area]">
       <div class="location-details">

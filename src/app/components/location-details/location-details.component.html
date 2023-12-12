@@ -1,12 +1,28 @@
 <div class="rent-post-main">
-  <div class="location-rent-post-heading">
-    <h1>Rent Posts in {{ location?.area }}</h1>
-  </div>
-  <div class="rent-post-item-main">
-    <app-rent-post-item
-      *ngFor="let rentPost of locationRentPosts"
-      [rentPost]="rentPost"
-      class="rent-post-item"
-    ></app-rent-post-item>
+  <app-error-messages
+    *ngIf="areaErrorMessage"
+    [errorMessage]="areaErrorMessage"
+  ></app-error-messages>
+  <div *ngIf="!areaErrorMessage">
+    <div class="location-rent-post-heading">
+      <h1>Rent Posts in {{ location?.area }}</h1>
+    </div>
+    <h3
+      *ngIf="locationRentPosts.length == 0 && !postErrorMessage"
+      class="text-center color-red"
+    >
+      Empty
+    </h3>
+    <app-error-messages
+      *ngIf="postErrorMessage"
+      [errorMessage]="postErrorMessage"
+    ></app-error-messages>
+    <div class="rent-post-item-main">
+      <app-rent-post-item
+        *ngFor="let rentPost of locationRentPosts"
+        [rentPost]="rentPost"
+        class="rent-post-item"
+      ></app-rent-post-item>
+    </div>
   </div>
 </div>

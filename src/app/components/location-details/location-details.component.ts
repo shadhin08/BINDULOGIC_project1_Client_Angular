@@ -14,29 +14,51 @@ export class LocationDetailsComponent implements OnInit {
   location: City | undefined;
   routerLocation: string | undefined;
   routerEvents: any;
+  areaErrorMessage: string | undefined;
+  postErrorMessage: string | undefined;
 
   constructor(private dataServices: DataService, private router: Router) {
     this.routerEvents = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
         this.routerLocation = event.url.split('/')[2];
-        console.log(this.routerLocation);
       }
     });
   }
 
   ngOnInit(): void {
     if (this.routerLocation) {
-      this.dataServices
-        .getRentAreaByName(this.routerLocation)
-        .subscribe((location) => {
+      this.dataServices.getRentAreaByName(this.routerLocation).subscribe(
+        (location) => {
           this.location = location;
-        });
-      this.dataServices
-        .getRentPostByArea(this.routerLocation)
-        .subscribe((rentPosts) => {
+        },
+        (error) => {
+          if (error.status === 0) {
+            this.areaErrorMessage = 'Server is not responding';
+          } else {
+            this.areaErrorMessage = error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong';
+          }
+        }
+      );
+      this.dataServices.getRentPostByArea(this.routerLocation).subscribe(
+        (rentPosts) => {
           this.locationRentPosts = rentPosts;
-        });
-      console.log(this.locationRentPosts);
+        },
+        (error) => {
+          if (error.status === 0) {
+            this.postErrorMessage = 'Server is not responding';
+          } else {
+            this.postErrorMessage = error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong';
+          }
+        }
+      );
     }
   }
 }

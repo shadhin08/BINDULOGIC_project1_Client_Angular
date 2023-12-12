@@ -111,7 +111,8 @@ import { CreateRentPostComponent } from './components/create-rent-post/create-re
 import { CreateAccountComponent } from './components/create-account/create-account.component';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
 import { StoreModule } from '@ngrx/store';
-import { logedInUserReducer } from './shared/logedin-user/loggedin-user.reducer';
+import { logedInUserReducer } from './shared/logedin-user/logedin-user.reducer';
+import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 
 @NgModule({
   declarations: [
@@ -128,6 +129,7 @@ import { logedInUserReducer } from './shared/logedin-user/loggedin-user.reducer'
     CreateRentPostComponent,
     CreateAccountComponent,
     LocationDetailsComponent,
+    ErrorMessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -159,7 +161,7 @@ import { logedInUserReducer } from './shared/logedin-user/loggedin-user.reducer'
     OrderListModule,
     TableModule,
     TabViewModule,
-    StoreModule.forRoot({ loggedInUser: logedInUserReducer }),
+    StoreModule.forRoot({ logedInUser: logedInUserReducer }),
   ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],

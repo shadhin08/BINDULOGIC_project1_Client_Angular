@@ -1,5 +1,13 @@
-<div class="margin-top-50">
+<app-error-messages
+  *ngIf="errorMessage"
+  [errorMessage]="errorMessage"
+></app-error-messages>
+<div *ngIf="!errorMessage" class="margin-top-50">
   <h1 class="users-heading">All Users</h1>
+  <h3 *ngIf="users.length == 0 && !errorMessage" class="text-center color-red">
+    Empty
+  </h3>
+
   <div *ngFor="let user of users">
     <div class="user-main">
       <div class="user-details" [routerLink]="['/user/', user?.username]">

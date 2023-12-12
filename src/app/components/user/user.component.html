@@ -1,4 +1,8 @@
-<div class="card">
+<app-error-messages
+  *ngIf="userErrorMessage"
+  [errorMessage]="userErrorMessage"
+></app-error-messages>
+<div *ngIf="!userErrorMessage" class="card">
   <div class="card">
     <p-splitter
       [panelSizes]="[25, 75]"
@@ -34,7 +38,18 @@
   <div class="text-center">
     <h1>{{ user?.username }} Rent Post</h1>
   </div>
-  <div class="rent-post-item-main">
+  <h3
+    *ngIf="userRentPosts.length == 0 && !rentPostErrorMessage"
+    class="text-center color-red"
+  >
+    Empty
+  </h3>
+
+  <app-error-messages
+    *ngIf="rentPostErrorMessage"
+    [errorMessage]="rentPostErrorMessage"
+  ></app-error-messages>
+  <div *ngIf="!rentPostErrorMessage" class="rent-post-item-main">
     <app-rent-post-item
       *ngFor="let rentPost of userRentPosts"
       [rentPost]="rentPost"

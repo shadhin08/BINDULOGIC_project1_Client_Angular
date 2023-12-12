@@ -24,14 +24,14 @@
         by:
         <span
           class="color-blue cursor-pointer"
-          [routerLink]="['/user', rentPost?.userUsername]"
+          [routerLink]="['/user/', rentPost?.userUsername]"
           ><b>{{ rentPost?.userUsername }}</b></span
         >
       </p>
     </ng-template>
     <div
       class="rent-location"
-      [routerLink]="['location/', rentPost?.rentAreaName]"
+      [routerLink]="['/location/', rentPost?.rentAreaName]"
     >
       {{ rentPost?.rentAreaName }}
     </div>

@@ -121,17 +121,24 @@ export class CreateAccountComponent implements OnInit {
           }
         },
         (error) => {
-          this.inputStatus = [
-            {
-              severity: 'error',
-              summary: 'Error',
-              detail: error.error?.message
-                ? error.error.message
-                : error.error
-                ? error.error
-                : 'Something went wrong',
-            },
-          ];
+          if (error.status === 0) {
+            this.inputStatus = [
+              { severity: 'error', summary: 'Error', detail: 'Server error' },
+            ];
+          } else {
+            this.inputStatus = [
+              {
+                severity: 'error',
+                summary: 'Error',
+                detail: error.error?.message
+                  ? error.error.message
+                  : error.error
+                  ? error.error
+                  : 'Something went wrong',
+              },
+            ];
+          }
+
           this.isSignupBtnDisabled = false;
         }
       );

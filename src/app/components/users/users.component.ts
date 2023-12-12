@@ -9,11 +9,25 @@ import { DataService } from '../../services/data.service';
 })
 export class UsersComponent implements OnInit {
   users: User[] = [];
+  errorMessage: string | undefined;
   constructor(private dataServices: DataService) {}
 
   ngOnInit(): void {
-    this.dataServices.getAllUser().subscribe((users) => {
-      this.users = users;
-    });
+    this.dataServices.getAllUser().subscribe(
+      (result) => {
+        this.users = result;
+      },
+      (error) => {
+        if (error.status === 0) {
+          this.errorMessage = 'Server is not responding';
+        } else {
+          this.errorMessage = error.error?.message
+            ? error.error.message
+            : error.error
+            ? error.error
+            : 'Something went wrong';
+        }
+      }
+    );
   }
 }

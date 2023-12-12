@@ -4,7 +4,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { User } from '../../interfaces/user';
-import { getUser } from '../../shared/logedin-user/loggedin-user.selectors';
 import { login } from '../../shared/logedin-user/logedin-user.actions';
 
 @Component({
@@ -17,7 +16,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private cookieService: CookieService,
     private router: Router,
-    private store: Store<{ loggedInUser: { loggedInUser: User } }>
+    private store: Store<{ logedInUser: { logedInUser: User } }>
   ) {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -32,21 +31,13 @@ export class NavbarComponent implements OnInit {
   isLogedIn: boolean = false;
   activeItem: MenuItem | undefined;
 
-  ngOnInit(): void {
-    this.logedinUser = this.cookieService.check('username');
-    if (this.logedinUser) {
-      const username = this.cookieService.get('username');
-      this.store.dispatch(login({ username: username }));
-    }
-
-    this.store.select('loggedInUser').subscribe((data: any) => {
-      console.log('data', data);
+  navItems() {
+    this.store.select('logedInUser').subscribe((data: any) => {
       if (data) {
-        this.logedinUser = data.isLogedin;
         this.isLogedIn = data.isLogedin;
-      } else console.log('no user');
+      }
     });
-
+    this.logedinUser = this.isLogedIn;
     this.items = [
       { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: '/' },
       { label: 'Users', icon: 'pi pi-fw pi-users', routerLink: '/users' },
@@ -64,6 +55,14 @@ export class NavbarComponent implements OnInit {
     this.activeItem = this.items[0];
 
     this.activateLast();
+  }
+
+  ngOnInit(): void {
+    const username = this.cookieService.get('username');
+    if (username) {
+      this.store.dispatch(login({ username: username }));
+    }
+    this.navItems();
   }
 
   onActiveItemChange(event: MenuItem) {

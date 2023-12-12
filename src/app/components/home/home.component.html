@@ -1,3 +1,13 @@
+<h3
+  *ngIf="rentPosts.length == 0 && !errorMessage"
+  class="text-center color-red"
+>
+  Empty
+</h3>
+<app-error-messages
+  *ngIf="errorMessage"
+  [errorMessage]="errorMessage"
+></app-error-messages>
 <div class="rent-post-item-main">
   <app-rent-post-item
     *ngFor="let rentPost of rentPosts"

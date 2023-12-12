@@ -1,5 +1,5 @@
 <div class="card">
-  <h1>{{ isLogedIn ? "true" : "false" }}</h1>
+  <h1 *ngIf="isLogedIn != logedinUser">{{ navItems() }}</h1>
   <p-tabMenu [model]="items" [activeItem]="activeItem">
     <ng-template pTemplate="start" let-item>
       <a

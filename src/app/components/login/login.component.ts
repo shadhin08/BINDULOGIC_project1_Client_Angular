@@ -4,7 +4,6 @@ import { Message } from 'primeng/api';
 import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { getUser } from '../../shared/logedin-user/loggedin-user.selectors';
 import { login } from '../../shared/logedin-user/logedin-user.actions';
 import { User } from '../../interfaces/user';
 
@@ -17,7 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private dataServices: DataService,
     private router: Router,
-    private store: Store<{ loggedInUser: { loggedInUser: User } }>
+    private store: Store<{ logedInUser: { logedInUser: User } }>
   ) {}
 
   loginMessages: Message[] = [];
@@ -45,15 +44,8 @@ export class LoginComponent implements OnInit {
             ];
 
             this.store.dispatch(login({ username: result.username }));
-
-            this.store.select('loggedInUser').subscribe((data) => {
-              console.log('dta', data);
-              if (data) {
-                console.log(data);
-              } else console.log('no user');
-            });
             this.isLoginBtnDisabled = false;
-            // this.router.navigate(['/private-profile']);
+            this.router.navigate(['/private-profile']);
           }
         },
         (error) => {

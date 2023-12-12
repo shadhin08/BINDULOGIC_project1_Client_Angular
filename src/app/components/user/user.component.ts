@@ -14,6 +14,9 @@ export class UserComponent {
   userRentPosts: RentPost[] = [];
   username: string | undefined;
 
+  userErrorMessage: string | undefined;
+  rentPostErrorMessage: string | undefined;
+
   routerEvents: any;
   constructor(private dataServices: DataService, private router: Router) {
     this.routerEvents = this.router.events.subscribe((event: any) => {
@@ -25,14 +28,38 @@ export class UserComponent {
 
   ngOnInit(): void {
     if (this.username) {
-      this.dataServices.getUserByUsername(this.username).subscribe((user) => {
-        this.user = user;
-      });
-      this.dataServices
-        .getRentPostByUsername(this.username)
-        .subscribe((rentPosts) => {
+      this.dataServices.getUserByUsername(this.username).subscribe(
+        (user) => {
+          this.user = user;
+        },
+        (error) => {
+          if (error.status === 0) {
+            this.userErrorMessage = 'Server is not responding';
+          } else {
+            this.userErrorMessage = error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong';
+          }
+        }
+      );
+      this.dataServices.getRentPostByUsername(this.username).subscribe(
+        (rentPosts) => {
           this.userRentPosts = rentPosts;
-        });
+        },
+        (error) => {
+          if (error.status === 0) {
+            this.rentPostErrorMessage = 'Server is not responding';
+          } else {
+            this.rentPostErrorMessage = error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong';
+          }
+        }
+      );
     }
   }
 }
