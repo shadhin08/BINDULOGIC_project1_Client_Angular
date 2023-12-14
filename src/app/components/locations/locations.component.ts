@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { City } from '../../interfaces/location';
+import { catchError, ignoreElements, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-locations',
@@ -8,26 +9,30 @@ import { City } from '../../interfaces/location';
   styleUrl: './locations.component.css',
 })
 export class LocationsComponent implements OnInit {
-  locations: City[] = [];
-  errorMessage: string | undefined;
   constructor(private dataServices: DataService) {}
 
+  allRentArea$: Observable<City[]> | undefined;
+  allRentAreaError$: Observable<string> | undefined;
+
   ngOnInit(): void {
-    this.dataServices.getAllRentArea().subscribe(
-      (result) => {
-        this.locations = result;
-      },
-      (error) => {
-        if (error.status === 0) {
-          this.errorMessage = 'Server is not responding';
-        } else {
-          this.errorMessage = error.error?.message
-            ? error.error.message
-            : error.error
-            ? error.error
-            : 'Something went wrong';
-        }
-      }
-    );
+    setTimeout(() => {
+      // ------------------
+      this.allRentArea$ = this.dataServices.getAllRentArea();
+      this.allRentAreaError$ = this.allRentArea$.pipe(
+        ignoreElements(),
+        catchError((error) => {
+          return of(
+            error.status == 0
+              ? 'Server is not responding'
+              : error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong'
+          );
+        })
+      );
+      // ------------------
+    }, 500);
   }
 }

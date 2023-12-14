@@ -39,9 +39,14 @@
         pRipple
         class="p-button-success"
         [routerLink]="['/signup']"
+        [disabled]="isLoginBtnDisabled"
       >
         Create an account
       </button>
     </div>
   </div>
+</div>
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast position="top-center" key="tc"></p-toast>
 </div>

@@ -1,10 +1,9 @@
 <div class="card">
-  <h1 *ngIf="isLogedIn != logedinUser">{{ navItems() }}</h1>
   <p-tabMenu [model]="items" [activeItem]="activeItem">
-    <ng-template pTemplate="start" let-item>
+    <ng-template pTemplate="item" let-item>
       <a
         class="p-menuitem-link flex justify-content-between align-items-center p-3"
-        [routerLink]="item.routerLink"
+        [routerLink]="item.url"
       >
         <div>
           <span [class]="item.icon"></span>
@@ -24,3 +23,15 @@
     </ng-template>
   </p-tabMenu>
 </div>
+
+<!-- item.lebel === 'Home'
+            ? '/'
+            : item.lebel === 'Users'
+            ? '/users'
+            : item.lebel === 'Locations'
+            ? '/locations'
+            : item.lebel === 'Profile'
+            ? '//private-profile'
+            : item.lebel === 'Login'
+            ? '/login'
+            : '/' -->

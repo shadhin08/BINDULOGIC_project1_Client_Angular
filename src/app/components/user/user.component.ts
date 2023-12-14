@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { catchError, ignoreElements, Observable, of } from 'rxjs';
 import { RentPost } from '../../interfaces/rent-post';
 import { User } from '../../interfaces/user';
 import { DataService } from '../../services/data.service';
@@ -10,12 +11,7 @@ import { DataService } from '../../services/data.service';
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  user: User | undefined;
-  userRentPosts: RentPost[] = [];
   username: string | undefined;
-
-  userErrorMessage: string | undefined;
-  rentPostErrorMessage: string | undefined;
 
   routerEvents: any;
   constructor(private dataServices: DataService, private router: Router) {
@@ -25,41 +21,57 @@ export class UserComponent {
       }
     });
   }
+  user$: Observable<User> | undefined;
+  userError$: Observable<string> | undefined;
+
+  userRentPosts$: Observable<RentPost[]> | undefined;
+  userRentPostsError$: Observable<string> | undefined;
 
   ngOnInit(): void {
     if (this.username) {
-      this.dataServices.getUserByUsername(this.username).subscribe(
-        (user) => {
-          this.user = user;
-        },
-        (error) => {
-          if (error.status === 0) {
-            this.userErrorMessage = 'Server is not responding';
-          } else {
-            this.userErrorMessage = error.error?.message
-              ? error.error.message
-              : error.error
-              ? error.error
-              : 'Something went wrong';
-          }
-        }
-      );
-      this.dataServices.getRentPostByUsername(this.username).subscribe(
-        (rentPosts) => {
-          this.userRentPosts = rentPosts;
-        },
-        (error) => {
-          if (error.status === 0) {
-            this.rentPostErrorMessage = 'Server is not responding';
-          } else {
-            this.rentPostErrorMessage = error.error?.message
-              ? error.error.message
-              : error.error
-              ? error.error
-              : 'Something went wrong';
-          }
-        }
-      );
+      setTimeout(() => {
+        // -----------------
+        this.user$ = this.dataServices.getUserByUsername(
+          this.username as string
+        );
+        this.userRentPostsError$ = this.user$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+        // -----------------
+      }, 500);
+
+      setTimeout(() => {
+        // -----------------
+        this.userRentPosts$ = this.dataServices.getRentPostByUsername(
+          this.username as string
+        );
+        this.userRentPostsError$ = this.userRentPosts$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+        // -----------------
+      }, 1000);
     }
   }
 }

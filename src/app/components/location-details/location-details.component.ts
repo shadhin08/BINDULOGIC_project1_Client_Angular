@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { catchError, ignoreElements, Observable, of } from 'rxjs';
 import { City } from '../../interfaces/location';
 import { RentPost } from '../../interfaces/rent-post';
 import { DataService } from '../../services/data.service';
@@ -10,12 +11,8 @@ import { DataService } from '../../services/data.service';
   styleUrl: './location-details.component.css',
 })
 export class LocationDetailsComponent implements OnInit {
-  locationRentPosts: RentPost[] = [];
-  location: City | undefined;
   routerLocation: string | undefined;
   routerEvents: any;
-  areaErrorMessage: string | undefined;
-  postErrorMessage: string | undefined;
 
   constructor(private dataServices: DataService, private router: Router) {
     this.routerEvents = this.router.events.subscribe((event: any) => {
@@ -25,40 +22,59 @@ export class LocationDetailsComponent implements OnInit {
     });
   }
 
+  rentArea$: Observable<City> | undefined;
+  rentAreaError$: Observable<string> | undefined;
+
+  rentPostsByArea$: Observable<RentPost[]> | undefined;
+  rentPostsByAreaError$: Observable<string> | undefined;
+
   ngOnInit(): void {
     if (this.routerLocation) {
-      this.dataServices.getRentAreaByName(this.routerLocation).subscribe(
-        (location) => {
-          this.location = location;
-        },
-        (error) => {
-          if (error.status === 0) {
-            this.areaErrorMessage = 'Server is not responding';
-          } else {
-            this.areaErrorMessage = error.error?.message
-              ? error.error.message
-              : error.error
-              ? error.error
-              : 'Something went wrong';
-          }
-        }
-      );
-      this.dataServices.getRentPostByArea(this.routerLocation).subscribe(
-        (rentPosts) => {
-          this.locationRentPosts = rentPosts;
-        },
-        (error) => {
-          if (error.status === 0) {
-            this.postErrorMessage = 'Server is not responding';
-          } else {
-            this.postErrorMessage = error.error?.message
-              ? error.error.message
-              : error.error
-              ? error.error
-              : 'Something went wrong';
-          }
-        }
-      );
+      setTimeout(() => {
+        //--------------------
+        this.rentArea$ = this.dataServices.getRentAreaByName(
+          this.routerLocation as string
+        );
+        this.rentAreaError$ = this.rentArea$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+
+        //---------------
+      }, 500);
+      // ------------------------------------------
+      // ------------------------------------------
+      setTimeout(() => {
+        //---------------
+        this.rentPostsByArea$ = this.dataServices.getRentPostByArea(
+          this.routerLocation as string
+        );
+        this.rentPostsByAreaError$ = this.rentPostsByArea$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+        //---------------
+      }, 1000);
     }
   }
 }

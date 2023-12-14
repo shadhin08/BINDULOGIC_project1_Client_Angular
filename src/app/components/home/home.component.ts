@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, ignoreElements, map, Observable, of } from 'rxjs';
 import { RentPost } from '../../interfaces/rent-post';
 import { DataService } from '../../services/data.service';
 
@@ -8,28 +9,29 @@ import { DataService } from '../../services/data.service';
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  rentPosts: RentPost[] = [];
-  errorMessage: string | undefined;
-
   constructor(private dataServices: DataService) {}
 
+  allRentPosts$: Observable<RentPost[]> | undefined;
+  allRentPostsError$: Observable<string> | undefined;
+
   ngOnInit(): void {
-    this.dataServices.getAllRentPost().subscribe(
-      (result) => {
-        this.rentPosts = result;
-      },
-      (error) => {
-        console.log(error);
-        if (error.status === 0) {
-          this.errorMessage = 'Server is not responding';
-        } else {
-          this.errorMessage = error.error?.message
-            ? error.error.message
-            : error.error
-            ? error.error
-            : 'Something went wrong';
-        }
-      }
-    );
+    setTimeout(() => {
+      this.allRentPosts$ = this.dataServices.getAllRentPost();
+      this.allRentPostsError$ = this.allRentPosts$.pipe(
+        ignoreElements(),
+        catchError((error) => {
+          console.log(error);
+          return of(
+            error.status == 0
+              ? 'Server is not responding'
+              : error.error?.message
+              ? error.error.message
+              : error.error
+              ? error.error
+              : 'Something went wrong'
+          );
+        })
+      );
+    }, 500);
   }
 }

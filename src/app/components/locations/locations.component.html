@@ -1,17 +1,41 @@
-<app-error-messages
-  *ngIf="errorMessage"
-  [errorMessage]="errorMessage"
-></app-error-messages>
-<div *ngIf="!errorMessage" class="margin-top-50">
+<div
+  *ngIf="{
+    allRentArea: allRentArea$ | async,
+    allRentAreaError: allRentAreaError$ | async
+  } as dataHandler"
+>
   <h1 class="locations-heading">All Locations</h1>
-
-  <h3 *ngIf="locations.length == 0" class="text-center color-red">Empty</h3>
-
-  <div *ngFor="let location of locations">
-    <div class="location-main" [routerLink]="['/location/', location?.area]">
-      <div class="location-details">
-        <h1>{{ location.area }}</h1>
+  <div>
+    <div
+      *ngIf="
+        !dataHandler.allRentAreaError && dataHandler.allRentArea as allRentArea;
+        else loading
+      "
+      class="rent-post-item-main"
+    >
+      <h3 *ngIf="allRentArea.length == 0" class="text-center color-red">
+        Empty
+      </h3>
+      <div *ngFor="let location of allRentArea">
+        <div
+          class="location-main"
+          [routerLink]="['/location/', location?.area]"
+        >
+          <div class="location-details">
+            <h1>{{ location.area }}</h1>
+          </div>
+        </div>
       </div>
     </div>
+    <app-error-messages
+      *ngIf="dataHandler.allRentAreaError as errorMessage"
+      [errorMessage]="errorMessage"
+    ></app-error-messages>
+
+    <ng-template #loading>
+      <div *ngIf="!dataHandler.allRentAreaError">
+        <app-spinner></app-spinner>
+      </div>
+    </ng-template>
   </div>
 </div>

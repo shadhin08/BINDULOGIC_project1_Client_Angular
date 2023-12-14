@@ -6,6 +6,7 @@ import { User } from '../../interfaces/user';
 import { DataService } from '../../services/data.service';
 import { Store } from '@ngrx/store';
 import { logOut } from '../../shared/logedin-user/logedin-user.actions';
+import { catchError, ignoreElements, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-private-profile',
@@ -13,12 +14,6 @@ import { logOut } from '../../shared/logedin-user/logedin-user.actions';
   styleUrl: './private-profile.component.css',
 })
 export class PrivateProfileComponent implements OnInit {
-  user: User | undefined;
-  userRentPosts: RentPost[] = [];
-
-  userErrorMessage: string | undefined;
-  rentPostErrorMessage: string | undefined;
-
   constructor(
     private dataServices: DataService,
     private cookieService: CookieService,
@@ -28,45 +23,66 @@ export class PrivateProfileComponent implements OnInit {
   username: string = this.cookieService.get('username');
   isLogOutBtnDisabled: boolean = false;
 
+  user$: Observable<User> | undefined;
+  userError$: Observable<string> | undefined;
+
+  userRentPosts$: Observable<RentPost[]> | undefined;
+  userRentPostsError$: Observable<string> | undefined;
+
   ngOnInit(): void {
-    this.dataServices.getUserByUsername(this.username).subscribe(
-      (user) => {
-        this.user = user;
-      },
-      (error) => {
-        if (error.status === 0) {
-          this.userErrorMessage = 'Server is not responding';
-        } else {
-          this.userErrorMessage = error.error?.message
-            ? error.error.message
-            : error.error
-            ? error.error
-            : 'Something went wrong';
-        }
-      }
-    );
-    this.dataServices.getRentPostByUsername(this.username).subscribe(
-      (rentPosts) => {
-        this.userRentPosts = rentPosts;
-      },
-      (error) => {
-        if (error.status === 0) {
-          this.rentPostErrorMessage = 'Server is not responding';
-        } else {
-          this.rentPostErrorMessage = error.error?.message
-            ? error.error.message
-            : error.error
-            ? error.error
-            : 'Something went wrong';
-        }
-      }
-    );
+    if (this.username) {
+      setTimeout(() => {
+        // -----------------
+        this.user$ = this.dataServices.getUserByUsername(
+          this.username as string
+        );
+        this.userRentPostsError$ = this.user$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+        // -----------------
+      }, 500);
+
+      setTimeout(() => {
+        // -----------------
+        this.userRentPosts$ = this.dataServices.getRentPostByUsername(
+          this.username as string
+        );
+        this.userRentPostsError$ = this.userRentPosts$.pipe(
+          ignoreElements(),
+          catchError((error) => {
+            return of(
+              error.status == 0
+                ? 'Server is not responding'
+                : error.error?.message
+                ? error.error.message
+                : error.error
+                ? error.error
+                : 'Something went wrong'
+            );
+          })
+        );
+        // -----------------
+      }, 1000);
+    }
   }
 
   onLogOutClick() {
-    this.cookieService.delete('username');
-    this.store.dispatch(logOut());
     this.isLogOutBtnDisabled = true;
-    this.router.navigate(['/login']);
+    this.cookieService.delete('username');
+    setTimeout(() => {
+      this.store.dispatch(logOut());
+      this.router.navigate(['/login']);
+    }, 1000);
   }
 }

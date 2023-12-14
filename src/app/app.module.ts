@@ -113,6 +113,7 @@ import { LocationDetailsComponent } from './components/location-details/location
 import { StoreModule } from '@ngrx/store';
 import { logedInUserReducer } from './shared/logedin-user/logedin-user.reducer';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +131,7 @@ import { ErrorMessagesComponent } from './components/error-messages/error-messag
     CreateAccountComponent,
     LocationDetailsComponent,
     ErrorMessagesComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -161,6 +163,7 @@ import { ErrorMessagesComponent } from './components/error-messages/error-messag
     OrderListModule,
     TableModule,
     TabViewModule,
+    ProgressSpinnerModule,
     StoreModule.forRoot({ logedInUser: logedInUserReducer }),
   ],
   providers: [provideClientHydration()],

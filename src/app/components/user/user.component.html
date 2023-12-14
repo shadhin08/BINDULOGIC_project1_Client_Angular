@@ -1,59 +1,97 @@
-<app-error-messages
-  *ngIf="userErrorMessage"
-  [errorMessage]="userErrorMessage"
-></app-error-messages>
-<div *ngIf="!userErrorMessage" class="card">
-  <div class="card">
-    <p-splitter
-      [panelSizes]="[25, 75]"
-      [style]="{ height: '500px' }"
-      styleClass="mb-5"
+<div
+  *ngIf="{
+    user: user$ | async,
+    userError: userError$ | async
+  } as dataHandler"
+  class="rent-post-main"
+>
+  <div>
+    <div
+      *ngIf="!dataHandler.userError && dataHandler.user as user; else loading"
     >
-      <ng-template pTemplate>
-        <div class="col flex align-items-center justify-content-center">
-          <img
-            class="user-image"
-            alt="Card"
-            width="100%"
-            height="auto"
-            [src]="
-              user?.image
-                ? user?.image
-                : 'https://primefaces.org/cdn/primeng/images/usercard.png'
-            "
-          />
-        </div>
-      </ng-template>
-      <ng-template pTemplate>
-        <div
-          class="col flex align-items-center justify-content-center user-details"
+      <div class="card">
+        <p-splitter
+          [panelSizes]="[25, 75]"
+          [style]="{ height: '500px' }"
+          styleClass="mb-5"
         >
-          <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
-          <h3>{{ user?.username }}</h3>
-          <h3>{{ user?.email }}</h3>
-        </div>
-      </ng-template>
-    </p-splitter>
-  </div>
-  <div class="text-center">
-    <h1>{{ user?.username }} Rent Post</h1>
-  </div>
-  <h3
-    *ngIf="userRentPosts.length == 0 && !rentPostErrorMessage"
-    class="text-center color-red"
-  >
-    Empty
-  </h3>
+          <ng-template pTemplate>
+            <div class="col flex align-items-center justify-content-center">
+              <img
+                class="user-image"
+                alt="Card"
+                width="100%"
+                height="auto"
+                [src]="
+                  user?.image
+                    ? user?.image
+                    : 'https://primefaces.org/cdn/primeng/images/usercard.png'
+                "
+              />
+            </div>
+          </ng-template>
+          <ng-template pTemplate>
+            <div
+              class="col flex align-items-center justify-content-center user-details"
+            >
+              <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
+              <h3>{{ user?.username }}</h3>
+              <h3>{{ user?.email }}</h3>
+            </div>
+          </ng-template>
+        </p-splitter>
+      </div>
 
-  <app-error-messages
-    *ngIf="rentPostErrorMessage"
-    [errorMessage]="rentPostErrorMessage"
-  ></app-error-messages>
-  <div *ngIf="!rentPostErrorMessage" class="rent-post-item-main">
-    <app-rent-post-item
-      *ngFor="let rentPost of userRentPosts"
-      [rentPost]="rentPost"
-      class="rent-post-item"
-    ></app-rent-post-item>
+      <!-- ----------------------------------------- -->
+      <div
+        *ngIf="{
+          userRentPosts: userRentPosts$ | async,
+          userRentPostsError: userRentPostsError$ | async
+        } as dataHandler"
+      >
+        <div>
+          <div
+            *ngIf="
+              !dataHandler.userRentPostsError &&
+                dataHandler.userRentPosts as rentPosts;
+              else loading
+            "
+          >
+            <h3 *ngIf="rentPosts.length == 0" class="text-center color-red">
+              Empty
+            </h3>
+            <div class="rent-post-item-main">
+              <app-rent-post-item
+                *ngFor="let rentPost of rentPosts"
+                [rentPost]="rentPost"
+                class="rent-post-item"
+              ></app-rent-post-item>
+            </div>
+          </div>
+          <app-error-messages
+            *ngIf="dataHandler.userRentPostsError as errorMessage"
+            [errorMessage]="errorMessage"
+          ></app-error-messages>
+
+          <ng-template #loading>
+            <div *ngIf="!dataHandler.userRentPostsError">
+              <app-spinner></app-spinner>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- ----------------------------------------- -->
+    </div>
+    <app-error-messages
+      *ngIf="dataHandler.userError as errorMessage"
+      [errorMessage]="errorMessage"
+    ></app-error-messages>
+
+    <ng-template #loading>
+      <div *ngIf="!dataHandler.userError">
+        <app-spinner></app-spinner>
+      </div>
+    </ng-template>
   </div>
 </div>

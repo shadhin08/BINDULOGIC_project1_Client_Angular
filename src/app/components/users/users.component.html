@@ -1,34 +1,53 @@
-<app-error-messages
-  *ngIf="errorMessage"
-  [errorMessage]="errorMessage"
-></app-error-messages>
-<div *ngIf="!errorMessage" class="margin-top-50">
+<div
+  *ngIf="{
+    allUser: allUser$ | async,
+    allUserError: allUserError$ | async
+  } as dataHandler"
+>
   <h1 class="users-heading">All Users</h1>
-  <h3 *ngIf="users.length == 0 && !errorMessage" class="text-center color-red">
-    Empty
-  </h3>
+  <div>
+    <div
+      *ngIf="
+        !dataHandler.allUserError && dataHandler.allUser as allUser;
+        else loading
+      "
+      class="rent-post-item-main"
+    >
+      <h3 *ngIf="allUser.length == 0" class="text-center color-red">Empty</h3>
 
-  <div *ngFor="let user of users">
-    <div class="user-main">
-      <div class="user-details" [routerLink]="['/user/', user?.username]">
-        <div class="user-image">
-          <img
-            [src]="
-              user?.image
-                ? user?.image
-                : 'https://primefaces.org/cdn/primeng/images/usercard.png'
-            "
-            alt=""
-          />
-        </div>
-        <div class="user-data">
-          <h1>
-            <b> {{ user.firstName }} {{ user.lastName }}</b>
-          </h1>
-          <p><b>Username: </b>{{ user.username }}</p>
-          <p><b>Email: </b>{{ user.email }}</p>
+      <div *ngFor="let user of allUser">
+        <div class="user-main">
+          <div class="user-details" [routerLink]="['/user/', user?.username]">
+            <div class="user-image">
+              <img
+                [src]="
+                  user?.image
+                    ? user?.image
+                    : 'https://primefaces.org/cdn/primeng/images/usercard.png'
+                "
+                alt=""
+              />
+            </div>
+            <div class="user-data">
+              <h1>
+                <b> {{ user.firstName }} {{ user.lastName }}</b>
+              </h1>
+              <p><b>Username: </b>{{ user.username }}</p>
+              <p><b>Email: </b>{{ user.email }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <app-error-messages
+      *ngIf="dataHandler.allUserError as errorMessage"
+      [errorMessage]="errorMessage"
+    ></app-error-messages>
+
+    <ng-template #loading>
+      <div *ngIf="!dataHandler.allUserError">
+        <app-spinner></app-spinner>
+      </div>
+    </ng-template>
   </div>
 </div>

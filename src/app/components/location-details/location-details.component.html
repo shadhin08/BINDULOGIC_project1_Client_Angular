@@ -1,28 +1,71 @@
-<div class="rent-post-main">
-  <app-error-messages
-    *ngIf="areaErrorMessage"
-    [errorMessage]="areaErrorMessage"
-  ></app-error-messages>
-  <div *ngIf="!areaErrorMessage">
-    <div class="location-rent-post-heading">
-      <h1>Rent Posts in {{ location?.area }}</h1>
-    </div>
-    <h3
-      *ngIf="locationRentPosts.length == 0 && !postErrorMessage"
-      class="text-center color-red"
+<div
+  *ngIf="{
+    rentArea: rentArea$ | async,
+    rentAreaError: rentAreaError$ | async
+  } as dataHandler"
+  class="rent-post-main"
+>
+  <div>
+    <div
+      *ngIf="
+        !dataHandler.rentAreaError && dataHandler.rentArea as rentArea;
+        else loading
+      "
     >
-      Empty
-    </h3>
-    <app-error-messages
-      *ngIf="postErrorMessage"
-      [errorMessage]="postErrorMessage"
-    ></app-error-messages>
-    <div class="rent-post-item-main">
-      <app-rent-post-item
-        *ngFor="let rentPost of locationRentPosts"
-        [rentPost]="rentPost"
-        class="rent-post-item"
-      ></app-rent-post-item>
+      <div class="location-rent-post-heading">
+        <h1>Rent Posts in {{ rentArea?.area }}</h1>
+      </div>
+
+      <!-- ----------------------------------------- -->
+      <div
+        *ngIf="{
+          rentPostsByArea: rentPostsByArea$ | async,
+          rentPostsByAreaError: rentPostsByAreaError$ | async
+        } as dataHandler"
+      >
+        <div>
+          <div
+            *ngIf="
+              !dataHandler.rentPostsByAreaError &&
+                dataHandler.rentPostsByArea as rentPosts;
+              else loading
+            "
+          >
+            <h3 *ngIf="rentPosts.length == 0" class="text-center color-red">
+              Empty
+            </h3>
+            <div class="rent-post-item-main">
+              <app-rent-post-item
+                *ngFor="let rentPost of rentPosts"
+                [rentPost]="rentPost"
+                class="rent-post-item"
+              ></app-rent-post-item>
+            </div>
+          </div>
+          <app-error-messages
+            *ngIf="dataHandler.rentPostsByAreaError as errorMessage"
+            [errorMessage]="errorMessage"
+          ></app-error-messages>
+
+          <ng-template #loading>
+            <div *ngIf="!dataHandler.rentPostsByAreaError">
+              <app-spinner></app-spinner>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- ----------------------------------------- -->
     </div>
+    <app-error-messages
+      *ngIf="dataHandler.rentAreaError as errorMessage"
+      [errorMessage]="errorMessage"
+    ></app-error-messages>
+
+    <ng-template #loading>
+      <div *ngIf="!dataHandler.rentAreaError">
+        <app-spinner></app-spinner>
+      </div>
+    </ng-template>
   </div>
 </div>

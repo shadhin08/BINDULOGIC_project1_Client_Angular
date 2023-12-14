@@ -43,7 +43,7 @@ export class DataService {
     const url = `${this.apiUrl}/user`;
     return this.http.post<User>(url, user, httpOptions);
   }
-  userLogin(username: string, password: string): Observable<any> {
+  userLogin(username: string, password: string): Observable<User> {
     // const userCredentials = { username, password };
     const url = `${this.apiUrl}/auth/login`;
     return this.http.post<User>(url, { username, password }, httpOptions);
@@ -56,11 +56,11 @@ export class DataService {
 
   getAllRentArea(): Observable<City[]> {
     const url = `${this.apiUrl}/rent-area`;
-    return this.http.get<any>(url);
+    return this.http.get<City[]>(url);
   }
   getRentAreaByName(name: string): Observable<City> {
     const url = `${this.apiUrl}/rent-area/${name}`;
-    return this.http.get<any>(url);
+    return this.http.get<City>(url);
   }
   getRentPostByArea(name: string): Observable<RentPost[]> {
     const url = `${this.apiUrl}/rent-post/area/${name}`;

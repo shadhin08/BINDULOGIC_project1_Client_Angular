@@ -1,17 +1,34 @@
-<h3
-  *ngIf="rentPosts.length == 0 && !errorMessage"
-  class="text-center color-red"
+<div
+  *ngIf="{
+    allRentPosts: allRentPosts$ | async,
+    allRentPostsError: allRentPostsError$ | async
+  } as dataHandler"
 >
-  Empty
-</h3>
-<app-error-messages
-  *ngIf="errorMessage"
-  [errorMessage]="errorMessage"
-></app-error-messages>
-<div class="rent-post-item-main">
-  <app-rent-post-item
-    *ngFor="let rentPost of rentPosts"
-    [rentPost]="rentPost"
-    class="rent-post-item"
-  ></app-rent-post-item>
+  <div>
+    <div
+      *ngIf="
+        !dataHandler.allRentPostsError && dataHandler.allRentPosts as rentPosts;
+        else loading
+      "
+    >
+      <h3 *ngIf="rentPosts.length == 0" class="text-center color-red">Empty</h3>
+      <div class="rent-post-item-main">
+        <app-rent-post-item
+          *ngFor="let rentPost of rentPosts"
+          [rentPost]="rentPost"
+          class="rent-post-item"
+        ></app-rent-post-item>
+      </div>
+    </div>
+    <app-error-messages
+      *ngIf="dataHandler.allRentPostsError as errorMessage"
+      [errorMessage]="errorMessage"
+    ></app-error-messages>
+
+    <ng-template #loading>
+      <div *ngIf="!dataHandler.allRentPostsError">
+        <app-spinner></app-spinner>
+      </div>
+    </ng-template>
+  </div>
 </div>
